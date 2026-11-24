@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Last Semester</title>
+  <script>
+    // Deteksi perangkat: layar sentuh (HP/tablet) => kontrol panah di layar; desktop => WASD/panah keyboard.
+    // Untuk uji di desktop: tambahkan ?controls=touch di URL (atau ?controls=keyboard untuk memaksa keyboard).
+    (function () {
+      var mq = function (q) { return !!(window.matchMedia && window.matchMedia(q).matches); };
+      var force = (location.search.match(/[?&]controls=(touch|keyboard)/) || [])[1];
+      var detect = function () {
+        if (force) return force === 'touch';
+        var ua = navigator.userAgent || '';
+        var ipadDesktopMode = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+        return mq('(pointer: coarse)') || mq('(hover: none)') || ipadDesktopMode || /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+      };
+      var apply = function () { document.documentElement.classList.toggle('is-touch', detect()); };
+      apply();
+      window.__applyControlMode = apply;
+      ['(pointer: coarse)', '(hover: none)'].forEach(function (q) {
+        var m = window.matchMedia && window.matchMedia(q);
+        if (m && m.addEventListener) m.addEventListener('change', apply);
+      });
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Beranda -->
+  <section id="home" class="screen active">
+    <div class="side">
+      <h1>The Last<br>Semester</h1>
+      <nav id="navGuest">
+        <button id="btnLogin" class="hb">
+          <span class="frame"></span>
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="dim" d="M3 2h6v12H3z"/><path d="M9 2h3v11H9z"/><rect class="cut" x="10" y="7" width="1" height="2"/><rect x="2" y="14" width="12" height="1"/></svg></span>
+          <span class="tx"><b>Login</b><i class="rule"></i><small>Masuk ke dunia mimpi yang belum usai.</small></span>
+        </button>
+        <button id="btnRegister" class="hb">
+          <span class="frame"></span>
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 1h7l3 3v6H2z"/><rect class="cut" x="5" y="3" width="3" height="3"/><rect class="cut" x="4" y="7" width="5" height="2"/><rect x="11" y="9" width="2" height="6"/><rect x="9" y="11" width="6" height="2"/></svg></span>
+          <span class="tx"><b>Register</b><i class="rule"></i><small>Mulai bab baru dalam perjalanan ini.</small></span>
+        </button>
+        <button id="btnHowTo" class="hb">
+          <span class="frame"></span>
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="dim" d="M1 3h6v11H1z"/><path d="M9 3h6v11H9z"/><rect class="cut" x="2" y="5" width="4" height="1"/><rect class="cut" x="2" y="7" width="4" height="1"/><rect class="cut" x="2" y="9" width="3" height="1"/><rect class="cut" x="10" y="5" width="4" height="1"/><rect class="cut" x="10" y="7" width="4" height="1"/><rect class="cut" x="10" y="9" width="3" height="1"/><rect x="7" y="2" width="2" height="12"/></svg></span>
+          <span class="tx"><b>How to Play</b><i class="rule"></i><small>Kontrol dan cara menjalani semester terakhir.</small></span>
+        </button>
+        <button id="btnCredit" class="hb">
+          <span class="frame"></span>
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l2 4 4.5.6-3.3 3.1.8 4.5L8 11l-4 2.2.8-4.5L1.5 5.6 6 5z"/><rect class="cut" x="7" y="5" width="2" height="4"/></svg></span>
+          <span class="tx"><b>Credit</b><i class="rule"></i><small>Orang-orang di balik cerita ini.</small></span>
+        </button>
+      </nav>
+      <nav id="navUser" hidden>
+        <button id="btnContinue" class="hb">
+          <span class="frame"></span>
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1h2v14H3zM5 2h2v12H5zM7 3h2v10H7zM9 4h2v8H9zM11 5h2v6h-2zM13 6h1v4h-1z"/></svg></span>
+          <span class="tx"><b>Lanjutkan</b><i class="rule"></i><small>Pilih slot dan teruskan ceritamu.</small></span>
+        </button>
+        <button id="btnLogout" class="hb">
+          <span class="frame"></span>
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="dim" d="M2 2h6v12H2z"/><rect class="cut" x="6" y="7" width="1" height="2"/><rect x="8" y="7" width="6" height="2"/><rect x="12" y="5" width="2" height="2"/><rect x="12" y="9" width="2" height="2"/><rect x="10" y="3" width="2" height="2"/><rect x="10" y="11" width="2" height="2"/></svg></span>
+          <span class="tx"><b>Logout</b><i class="rule"></i><small>Keluar dari akun ini.</small></span>
+        </button>
+        <button id="btnAch" class="hb">
+          <span class="frame"></span>
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1h8v6a4 4 0 01-8 0z"/><path class="dim" d="M1 2h3v2H2v1h2v2H1zM12 2h3v5h-3V5h2V4h-2z"/><rect class="cut" x="6" y="3" width="1" height="3"/><rect x="7" y="10" width="2" height="3"/><rect x="4" y="13" width="8" height="2"/></svg></span>
+          <span class="tx"><b>Achievement</b><i class="rule"></i><small>Pencapaian yang sudah kamu raih.</small></span>
+        </button>
+        <button id="btnCutscene" class="hb">
+          <span class="frame"></span>
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 4h14v10H1z"/><path class="dim" d="M1 1h14v3H1z"/><rect class="cut" x="3" y="1" width="2" height="3"/><rect class="cut" x="7" y="1" width="2" height="3"/><rect class="cut" x="11" y="1" width="2" height="3"/><path class="cut" d="M6 7l5 3-5 3z"/></svg></span>
+          <span class="tx"><b>Cutscene</b><i class="rule"></i><small>Tonton ulang adegan yang pernah dilihat.</small></span>
+        </button>
+      </nav>
+      <p id="homeInfo" class="info"></p>
+      <p class="blurb">Marco, anak kelas 12 yang bandel tapi nurut sama neneknya, punya satu semester untuk memilih: bahagiakan nenek, atau ikut circle yang menyeretnya turun.</p>
+    </div>
+  </section>
+
+  <div id="audioControls" aria-label="Pengaturan audio">
+    <button id="audioToggle" type="button" title="Mute / unmute" aria-label="Mute atau nyalakan audio">♫</button>
+    <label for="audioVolume">VOL</label><input id="audioVolume" type="range" min="0" max="1" step="0.01" value="0.58" aria-label="Volume audio">
+  </div>
+
+  <!-- Dashboard: pilih slot save / load -->
+  <section id="dashboard" class="screen">
+    <div class="card wide dash">
+      <span class="frame"></span>
+      <button type="button" id="btnBack" class="back" aria-label="Kembali ke beranda" title="Kembali ke beranda">
+        <span class="frame"></span>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="6" y="2" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect x="2" y="6" width="2" height="4"/><rect x="4" y="10" width="2" height="2"/><rect x="6" y="12" width="2" height="2"/><rect x="4" y="7" width="10" height="2"/></svg>
+      </button>
+      <header class="card-head">
+        <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2h10l2 2v10H2z"/><rect class="cut" x="5" y="2" width="6" height="4"/><rect x="8" y="3" width="2" height="2"/><rect class="cut" x="4" y="9" width="8" height="5"/><rect x="5" y="11" width="6" height="1"/></svg></span>
+        <h2>Halo, <span id="dashUser"></span></h2>
+        <p id="dashSummary" class="sub"></p>
+        <i class="rule"></i>
+      </header>
+      <div id="slots" class="slots"></div>
+      <div class="card-actions"><button type="button" id="btnLogoutDash" class="hb sm alt"><span class="frame"></span><span class="tx"><b>Logout</b></span></button></div>
+    </div>
+  </section>
+
+  <!-- Game -->
+  <section id="game" class="screen">
+    <canvas id="canvas" width="640" height="360"></canvas>
+    <img id="portrait" alt="" hidden>
+    <div id="dialog" hidden>
+      <b id="dName"></b>
+      <div id="dBody">
+        <p id="dText"></p>
+        <div id="dChoices"></div>
+      </div>
+      <span id="dNext" aria-hidden="true"></span>
+    </div>
+    <div id="hud">
+      <div id="hudDate" class="hbox">
+        <span id="hdDay">Sen, 18 Agu</span>
+        <span class="hrow"><b id="hdTime">06:00</b><i id="hdIcon" class="wx sun"></i></span>
+      </div>
+      <div id="hudQuest" class="hbox">
+        <i class="diamond"></i>
+        <span id="hqText">Pergi ke Kelas 12-1</span>
+      </div>
+      <div id="hudFlash" class="hbox" hidden></div>
+      <p id="hudHint">[E] bicara/tidur &nbsp; [M] peta wilayah &nbsp; [Esc] menu</p>
+    </div>
+    <div id="mobileControls" aria-label="Kontrol sentuh game">
+      <div class="touch-pad" role="group" aria-label="Gerakan Marco">
+        <button type="button" class="touch-key up" data-dir="up" aria-label="Bergerak ke atas" tabindex="-1"><img src="assets/images/ui/dpad-up.png" alt="" draggable="false"></button>
+        <button type="button" class="touch-key left" data-dir="left" aria-label="Bergerak ke kiri" tabindex="-1"><img src="assets/images/ui/dpad-left.png" alt="" draggable="false"></button>
+        <button type="button" class="touch-key down" data-dir="down" aria-label="Bergerak ke bawah" tabindex="-1"><img src="assets/images/ui/dpad-down.png" alt="" draggable="false"></button>
+        <button type="button" class="touch-key right" data-dir="right" aria-label="Bergerak ke kanan" tabindex="-1"><img src="assets/images/ui/dpad-right.png" alt="" draggable="false"></button>
+      </div>
+      <div class="touch-actions" role="group" aria-label="Aksi game">
+        <button type="button" class="touch-action run" data-key="shift" aria-label="Tahan untuk berlari">Lari</button>
+        <button type="button" class="touch-action img-btn map-key" data-tap="m" aria-label="Buka peta (M)"><img src="assets/images/ui/btn-m.png" alt="" draggable="false"></button>
+        <button type="button" class="touch-action primary img-btn" data-tap="e" aria-label="Interaksi atau lanjut dialog (E)"><img src="assets/images/ui/btn-e.png" alt="" draggable="false"></button>
+        <button type="button" class="touch-action pause-key img-btn" data-tap="escape" aria-label="Menu (Esc)"><img src="assets/images/ui/btn-esc.png" alt="" draggable="false"></button>
+      </div>
+    </div>
+    <!-- Menu jeda (Esc): kartu yang sama dengan popup Login / Credit -->
+    <div id="pause" hidden>
+      <section class="card pause-card" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+        <span class="frame"></span>
+        <header class="card-head">
+          <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="4" height="12"/><rect class="dim" x="9" y="2" width="4" height="12"/></svg></span>
+          <h2 id="pauseTitle">Jeda</h2>
+          <p class="sub">Dunia menunggu. Ambil napas dulu, Marco.</p>
+          <i class="rule"></i>
+        </header>
+        <nav class="pause-menu" aria-label="Menu jeda">
+          <button id="pResume" type="button" class="hb md">
+            <span class="frame"></span>
+            <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1h2v14H3zM5 2h2v12H5zM7 3h2v10H7zM9 4h2v8H9zM11 5h2v6h-2zM13 6h1v4h-1z"/></svg></span>
+            <span class="tx"><b>Lanjut</b><i class="rule"></i><small>Kembali ke permainan.</small></span>
+          </button>
+          <button id="pSave" type="button" class="hb md">
+            <span class="frame"></span>
+            <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2h10l2 2v10H2z"/><rect class="cut" x="4" y="2" width="6" height="4"/><rect class="dim" x="9" y="3" width="1" height="2"/><rect class="cut" x="4" y="9" width="8" height="5"/></svg></span>
+            <span class="tx"><b>Simpan</b><i class="rule"></i><small>Simpan progres ke slot ini.</small></span>
+          </button>
+          <button id="pHome" type="button" class="hb md alt">
+            <span class="frame"></span>
+            <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l7 6h-2v7H3V7H1z"/><rect class="cut" x="7" y="9" width="2" height="5"/></svg></span>
+            <span class="tx"><b>Kembali ke beranda</b><i class="rule"></i><small>Progres tersimpan otomatis.</small></span>
+          </button>
+        </nav>
+        <p class="pause-hint"><kbd>Esc</kbd> untuk melanjutkan</p>
+      </section>
+    </div>
+  </section>
+
+  <!-- Popup register / login -->
+  <div id="modal" class="modal" hidden>
+    <form id="authForm" class="card" novalidate role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <span class="frame"></span>
+      <header class="card-head">
+        <span class="ic"><svg id="mIcon" viewBox="0 0 16 16" aria-hidden="true"></svg></span>
+        <h2 id="mTitle"></h2>
+        <p id="mSub" class="sub"></p>
+        <i class="rule"></i>
+      </header>
+      <label class="field">
+        <span class="lbl">Username</span>
+        <span class="inp"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="2" width="6" height="6"/><path d="M2 14c0-3 2-5 6-5s6 2 6 5z"/></svg><input id="fUser" autocomplete="username" spellcheck="false" placeholder="nama akun"></span>
+      </label>
+      <label class="field">
+        <span class="lbl">Password</span>
+        <span class="inp"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 7V5a4 4 0 018 0v2h-2V5a2 2 0 00-4 0v2z"/><rect x="3" y="7" width="10" height="7"/></svg><input id="fPass" type="password" autocomplete="current-password" placeholder="kata sandi"></span>
+      </label>
+      <label id="rowPass2" class="field">
+        <span class="lbl">Ulangi password</span>
+        <span class="inp"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8l4 4 8-8-2-2-6 6-2-2z"/></svg><input id="fPass2" type="password" autocomplete="new-password" placeholder="ketik ulang kata sandi"></span>
+      </label>
+      <p id="mMsg" class="info" role="status" aria-live="polite"></p>
+      <div class="card-actions">
+        <button type="submit" id="mSubmit" class="hb sm"><span class="frame"></span><span class="tx"><b>OK</b></span></button>
+        <button type="button" id="mClose" class="hb sm alt"><span class="frame"></span><span class="tx"><b>Tutup</b></span></button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Popup How to Play -->
+  <div id="howModal" class="modal" hidden>
+    <section class="card wide" role="dialog" aria-modal="true" aria-labelledby="howTitle">
+      <span class="frame"></span>
+      <header class="card-head">
+        <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="dim" d="M1 3h6v11H1z"/><path d="M9 3h6v11H9z"/><rect x="7" y="2" width="2" height="12"/></svg></span>
+        <h2 id="howTitle">How to Play</h2>
+        <p class="sub">Semester terakhir Marco: tiga puluh hari untuk memilih.</p>
+        <i class="rule"></i>
+      </header>
+      <div class="card-body">
+        <h3>Kontrol</h3>
+        <ul class="keys">
+          <li class="kb-only"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8594;</kbd><span>Berjalan</span></li>
+          <li class="kb-only"><kbd>Shift</kbd><span>Berlari (lebih cepat, tapi lebih melelahkan)</span></li>
+          <li class="kb-only"><kbd>E</kbd><span>Bicara, buka pintu (gerbang, rumah, dan pintu tiap ruangan), tidur, naik angkot</span></li>
+          <li class="kb-only"><kbd>Enter</kbd> / <kbd>Space</kbd><span>Lanjut dialog dan cutscene</span></li>
+          <li class="kb-only"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><span>Memilih jawaban saat dialog bercabang</span></li>
+          <li class="kb-only"><kbd>M</kbd><span>Peta wilayah</span></li>
+          <li class="kb-only"><kbd>Esc</kbd><span>Menu jeda (simpan atau kembali ke beranda)</span></li>
+          <li class="touch-only"><kbd>&#8592;&#8593;&#8595;&#8594;</kbd><span>Berjalan: tahan dan geser jempol di tombol panah kiri (bisa serong)</span></li>
+          <li class="touch-only"><kbd>Lari</kbd><span>Tahan sambil berjalan untuk berlari (lebih cepat, tapi lebih melelahkan)</span></li>
+          <li class="touch-only"><kbd>E</kbd><span>Bicara, buka pintu (gerbang, rumah, dan pintu tiap ruangan), tidur, naik angkot, dan lanjut dialog</span></li>
+          <li class="touch-only"><kbd>M</kbd><span>Peta wilayah</span></li>
+          <li class="touch-only"><kbd>Esc</kbd><span>Menu jeda (simpan atau kembali ke beranda)</span></li>
+        </ul>
+        <h3>Tips</h3>
+        <ul class="tips">
+          <li>Setiap hari dimulai pukul 05.00. Sekolah mulai pukul 06.00 dan selesai pukul 15.00.</li>
+          <li>Ikuti penanda quest di pojok kanan atas dan di peta.</li>
+          <li>Tidur terlalu larut membuat besok sulit bangun, telat, dan sulit fokus.</li>
+          <li>Pilihanmu pada Nenek, Evelyn, dan circle Bram menentukan arah ceritanya.</li>
+          <li>Progres tersimpan dari menu jeda dan otomatis saat keluar. Login dulu untuk memakai slot save.</li>
+        </ul>
+      </div>
+      <div class="card-actions"><button type="button" class="hb sm" data-close><span class="frame"></span><span class="tx"><b>Tutup</b></span></button></div>
+    </section>
+  </div>
+
+  <!-- Popup Credit -->
+  <div id="creditModal" class="modal" hidden>
+    <section class="card" role="dialog" aria-modal="true" aria-labelledby="creditTitle">
+      <span class="frame"></span>
+      <header class="card-head">
+        <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l2 4 4.5.6-3.3 3.1.8 4.5L8 11l-4 2.2.8-4.5L1.5 5.6 6 5z"/></svg></span>
+        <h2 id="creditTitle">Credit</h2>
+        <p class="sub">The Last Semester</p>
+        <i class="rule"></i>
+      </header>
+      <div class="card-body credits">
+        <dl>
+          <dt>Cerita &amp; Game Design</dt><dd>Tim The Last Semester</dd>
+          <dt>Ilustrasi &amp; Seni Piksel</dt><dd>Tim The Last Semester</dd>
+          <dt>Pemrograman</dt><dd>Tim The Last Semester</dd>
+          <dt>Musik &amp; Efek Suara</dt><dd>Audio prosedural orisinal, tanpa OST berhak cipta</dd>
+        </dl>
+        <p class="thanks">Terima kasih sudah bermain.</p>
+      </div>
+      <div class="card-actions"><button type="button" class="hb sm" data-close><span class="frame"></span><span class="tx"><b>Tutup</b></span></button></div>
+    </section>
+  </div>
+
+  <!-- Popup Achievement -->
+  <div id="achModal" class="modal" hidden>
+    <section class="card wide" role="dialog" aria-modal="true" aria-labelledby="achTitle">
+      <span class="frame"></span>
+      <header class="card-head">
+        <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1h8v6a4 4 0 01-8 0z"/><rect class="cut" x="6" y="3" width="1" height="3"/><rect x="7" y="10" width="2" height="3"/><rect x="4" y="13" width="8" height="2"/></svg></span>
+        <h2 id="achTitle">Achievement</h2>
+        <p id="achSub" class="sub"></p>
+        <i class="rule"></i>
+      </header>
+      <div id="achList" class="slots"></div>
+      <div class="card-actions"><button type="button" class="hb sm" data-close><span class="frame"></span><span class="tx"><b>Tutup</b></span></button></div>
+    </section>
+  </div>
+
+  <!-- Popup Cutscene -->
+  <div id="csModal" class="modal" hidden>
+    <section class="card wide" role="dialog" aria-modal="true" aria-labelledby="csTitle">
+      <span class="frame"></span>
+      <header class="card-head">
+        <span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 4h14v10H1z"/><path class="dim" d="M1 1h14v3H1z"/><path class="cut" d="M6 7l5 3-5 3z"/></svg></span>
+        <h2 id="csTitle">Cutscene</h2>
+        <p id="csSub" class="sub"></p>
+        <i class="rule"></i>
+      </header>
+      <div id="csList" class="slots"></div>
+      <div class="card-actions"><button type="button" class="hb sm" data-close><span class="frame"></span><span class="tx"><b>Tutup</b></span></button></div>
+    </section>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/cutscene.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/mobile-controls.js"></script>
+  <script src="js/achievements.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
